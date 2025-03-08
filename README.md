@@ -1,5 +1,7 @@
 # Webdiatr
 
+<img src="package-icon.png" width="128">
+
 I made this library because if I have to participate in one more discussion about unit testing controller endpoints, I'm going to murder something.
 
 Better put me on a watchlist, though: we primarily use PHP at work, and won't be doing anything like what this library does any time soon.
@@ -8,7 +10,7 @@ Better put me on a watchlist, though: we primarily use PHP at work, and won't be
 
 Webdiatr is an opinionated "framework" (it's ~80 lines of code) to support writing vertical-slice-y, RPC-style web APIs with MediatR.
 
-You will write MediatR handlers that needn't have ever heard of this thing called "the internet", making reuse and testing easier. Best of all: you won't write a single ASP.NET controller endpoint, completing eliminating any discussion about how best to test them.
+You will write MediatR handlers that needn't have ever heard of this thing called "the internet", making reuse and testing easier. Best of all: you won't write a single ASP.NET controller endpoint, completly eliminating any discussion about how best to test them.
 
 Less is more. You don't have to test what doesn't exist.
 
