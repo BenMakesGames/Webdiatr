@@ -1,0 +1,7 @@
+﻿<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="LICENSE.md" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="BenMakesGames.Webdiatr\BenMakesGames.Webdiatr.csproj" Type="Classic C#" />
+</Solution>
