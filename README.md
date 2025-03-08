@@ -1,6 +1,6 @@
-# Webdiatr
+<center><img src="package-icon.png" width="128"></center>
 
-<img src="package-icon.png" width="128">
+# Webdiatr
 
 I made this library because if I have to participate in one more discussion about unit testing controller endpoints, I'm going to murder something.
 
