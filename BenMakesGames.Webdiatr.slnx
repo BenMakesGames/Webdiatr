@@ -4,4 +4,5 @@
     <File Path="README.md" />
   </Folder>
   <Project Path="BenMakesGames.Webdiatr\BenMakesGames.Webdiatr.csproj" Type="Classic C#" />
+  <Project Path="DemoApp\DemoApp.csproj" Type="Classic C#" />
 </Solution>

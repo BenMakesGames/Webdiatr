@@ -3,9 +3,9 @@
     <PropertyGroup>
         <Authors>Ben Hendel-Doying</Authors>
         <Company>Ben Hendel-Doying</Company>
-        <Description>An opinionated "framework" for writing RPC-ish web APIs with HTTP-unaware MediatR handlers.</Description>
+        <Description>An opinionated "framework" for writing RPC-ish web APIs with HTTP-unaware request handlers.</Description>
         <Copyright>2025 Ben Hendel-Doying</Copyright>
-        <Version>1.0.0-rc1</Version>
+        <Version>1.0.0-rc2</Version>
 
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageTags>mediatr rpc cqrs web api</PackageTags>
@@ -26,7 +26,6 @@
 
     <ItemGroup>
         <FrameworkReference Include="Microsoft.AspNetCore.App" Version="2.2.8" />
-        <PackageReference Include="MediatR" Version="12.4.1" />
     </ItemGroup>
 
     <ItemGroup>

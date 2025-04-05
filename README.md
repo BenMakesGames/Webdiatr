@@ -8,9 +8,9 @@ Better put me on a watchlist, though: we primarily use PHP at work, and won't be
 
 ## What is it?
 
-Webdiatr is an opinionated "framework" (it's ~80 lines of code) to support writing vertical-slice-y, RPC-style web APIs with MediatR.
+Webdiatr is an opinionated "framework" (it's ~80 lines of code) to support writing vertical-slice-y, RPC-style web APIs ~~with MediatR~~. (Oops: MediatR is going commercial - it's no longer a dependency of this library!)
 
-You will write MediatR handlers that needn't have ever heard of this thing called "the internet", making reuse and testing easier. Best of all: you won't write a single ASP.NET controller endpoint, completly eliminating any discussion about how best to test them.
+You will write ~~MediatR~~ <u>request</u> handlers that needn't have ever heard of this thing called "the internet", making reuse and testing easier. Best of all: you won't write a single ASP.NET controller endpoint, completely eliminating any discussion about how best to test them.
 
 Less is more. You don't have to test what doesn't exist.
 
@@ -66,10 +66,7 @@ public sealed class GetFruitResponse
 ```c#
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssemblyContaining<MyApp.SomeFeatureSlice.AssemblyMarker>();
-});
+builder.Services.AddWebdiatr();
 
 builder.Services.AddSingleton<IFruitRepository, FruitRepository>();
 
@@ -85,35 +82,7 @@ app
 app.Run();
 ```
 
-`.MapGetToQuery` and `.MapPostToCommand` are extension methods provided by Webdiatr. They are very small, and you could write them yourself if you don't want to depand on this library.
-
-Here they are:
-
-```c#
-public static class RequestMappingExtensions
-{
-    public static WebApplication MapGetToQuery<TRequest, TResponse>(this WebApplication app, string path) where TRequest: IRequest<TResponse>
-    {
-        app.MapGet(path, (IMediator mediatr, [AsParameters] TRequest request) => mediatr.Send(request));
-
-        return app;
-    }
-
-    public static WebApplication MapPostToCommand<TRequest>(this WebApplication app, string path) where TRequest: IRequest
-    {
-        app.MapPost(path, (IMediator mediatr, [FromBody] TRequest request) => mediatr.Send(request));
-
-        return app;
-    }
-
-    public static WebApplication MapPostToCommand<TRequest, TResponse>(this WebApplication app, string path) where TRequest: IRequest<TResponse>
-    {
-        app.MapPost(path, (IMediator mediatr, [FromBody] TRequest request) => mediatr.Send(request));
-
-        return app;
-    }
-}
-```
+`.MapGetToQuery` and `.MapPostToCommand` are extension methods provided by Webdiatr.
 
 ### Mapping exceptions (or using OneOf)
 
@@ -134,8 +103,8 @@ But if you hate throwing exceptions, I get it, and you don't need me to tell you
 
 Webdiatr doesn't have opinions about this. You could:
 
+* Use ASP.NET's built-in validation pipeline
 * Use FluentValidation, hoping they don't change their license and start asking for hundreds of dollars per dev per year
-* Hook up MediatR pipelines
 * Go old-school with `System.ComponentModel.DataAnnotations` and call `Validator.ValidateObject` in your handlers
 
 The choice is yours.
