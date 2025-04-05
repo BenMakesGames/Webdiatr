@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BenMakesGames.Webdiatr;
 
@@ -19,9 +20,10 @@ public static class RequestMappingExtensions
     /// <param name="app">The WebApplication to add the endpoint to</param>
     /// <param name="path">The URL path to map the endpoint to</param>
     /// <returns>The WebApplication for method chaining</returns>
-    public static WebApplication MapGetToQuery<TRequest, TResponse>(this WebApplication app, string path) where TRequest: IRequest<TResponse>
+    public static WebApplication MapGetToQuery<TRequest, TResponse>(this WebApplication app, string path)
     {
-        app.MapGet(path, (ICommandr commandr, [AsParameters] TRequest request, CancellationToken ctx) => commandr.Send(request, ctx));
+        if(app.Services.GetService<IRequestHandler<TRequest, TResponse>>() is null) throw new ArgumentException($"No handler of type IRequestHandler<{typeof(TRequest).Name}, {typeof(TResponse).Name}> was registered");
+        app.MapGet(path, (ICommandr commandr, [AsParameters] TRequest request, CancellationToken ctx) => commandr.Send<TRequest, TResponse>(request, ctx));
 
         return app;
     }
@@ -34,9 +36,10 @@ public static class RequestMappingExtensions
     /// <param name="app">The WebApplication to add the endpoint to</param>
     /// <param name="path">The URL path to map the endpoint to</param>
     /// <returns>The WebApplication for method chaining</returns>
-    public static WebApplication MapPostToCommand<TRequest>(this WebApplication app, string path) where TRequest: IRequest
+    public static WebApplication MapPostToCommand<TRequest>(this WebApplication app, string path)
     {
-        app.MapPost(path, (ICommandr commandr, [FromBody] TRequest request, CancellationToken ctx) => commandr.Send(request, ctx));
+        if(app.Services.GetService<IRequestHandler<TRequest>>() is null) throw new ArgumentException($"No handler of type IRequestHandler<{typeof(TRequest).Name}> was registered");
+        app.MapPost(path, (ICommandr commandr, [FromBody] TRequest request, CancellationToken ctx) => commandr.Send<TRequest>(request, ctx));
 
         return app;
     }
@@ -50,9 +53,10 @@ public static class RequestMappingExtensions
     /// <param name="app">The WebApplication to add the endpoint to</param>
     /// <param name="path">The URL path to map the endpoint to</param>
     /// <returns>The WebApplication for method chaining</returns>
-    public static WebApplication MapPostToCommand<TRequest, TResponse>(this WebApplication app, string path) where TRequest: IRequest<TResponse>
+    public static WebApplication MapPostToCommand<TRequest, TResponse>(this WebApplication app, string path)
     {
-        app.MapPost(path, (ICommandr commandr, [FromBody] TRequest request, CancellationToken ctx) => commandr.Send(request, ctx));
+        if(app.Services.GetService<IRequestHandler<TRequest, TResponse>>() is null) throw new ArgumentException($"No handler of type IRequestHandler<{typeof(TRequest).Name}, {typeof(TResponse).Name}> was registered");
+        app.MapPost(path, (ICommandr commandr, [FromBody] TRequest request, CancellationToken ctx) => commandr.Send<TRequest, TResponse>(request, ctx));
 
         return app;
     }

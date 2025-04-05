@@ -53,7 +53,7 @@ public sealed class GetFruit(
 }
 
 // this particular request has no body
-public sealed class GetFruitRequest : IRequest<GetFruitResponse>;
+public sealed class GetFruitRequest;
 
 public sealed class GetFruitResponse
 {

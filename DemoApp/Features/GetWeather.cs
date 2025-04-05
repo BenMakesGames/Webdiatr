@@ -2,22 +2,23 @@
 
 namespace DemoApp.Features;
 
-public sealed class GetWeather: IRequestHandler<GetWeatherRequest, GetWeatherResponse>
+public sealed class GetWeather: IRequestHandler<GetWeatherRequest, string>
 {
-    public Task<GetWeatherResponse> Handle(GetWeatherRequest request, CancellationToken cancellationToken)
+    public Task<string> Handle(GetWeatherRequest request, CancellationToken cancellationToken)
     {
         var tempC = Random.Shared.NextSingle() * 40 + -10;
 
-        return Task.FromResult(new GetWeatherResponse()
+        return Task.FromResult(tempC.ToString("F1"));
+        /*return Task.FromResult(new GetWeatherResponse()
         {
             City = request.City,
             TemperatureC = tempC,
             TemperatureF = tempC * 9 / 5 + 32
-        });
+        });*/
     }
 }
 
-public sealed class GetWeatherRequest: IRequest<GetWeatherResponse>
+public sealed class GetWeatherRequest
 {
     public required string City { get; init; }
 }

@@ -18,10 +18,10 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddWebdiatr(this IServiceCollection services, Action<WebdiatrConfiguration>? configuration = null)
     {
         services.AddScoped<ICommandr, Commandr>();
-        
+
         var config = new WebdiatrConfiguration();
         configuration?.Invoke(config);
-        
+
         if (config.AssembliesToScan.Any())
         {
             foreach (var assembly in config.AssembliesToScan)
@@ -40,14 +40,24 @@ public static class ServiceCollectionExtensions
     private static void RegisterHandlersFromAssembly(IServiceCollection services, Assembly assembly)
     {
         var handlerTypes = assembly.GetTypes()
+            .Where(t => !t.IsAbstract && !t.IsInterface)
             .Where(t => t.GetInterfaces()
-                .Any(i => i.IsGenericType && 
-                         (i.GetGenericTypeDefinition() == typeof(IRequestHandler<>) || 
+                .Any(i => i.IsGenericType &&
+                         (i.GetGenericTypeDefinition() == typeof(IRequestHandler<>) ||
                           i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>))));
 
         foreach (var handlerType in handlerTypes)
         {
-            services.AddScoped(handlerType);
+            var interfaces = handlerType.GetInterfaces()
+                .Where(i => i.IsGenericType &&
+                           (i.GetGenericTypeDefinition() == typeof(IRequestHandler<>) ||
+                            i.GetGenericTypeDefinition() == typeof(IRequestHandler<,>)));
+
+            foreach (var @interface in interfaces)
+            {
+                Console.WriteLine($"{@interface.Name}<{string.Join(", ", @interface.GenericTypeArguments.Select(a => a.Name))}> -> {handlerType.Name}");
+                services.AddScoped(@interface, handlerType);
+            }
         }
     }
 }
@@ -61,4 +71,4 @@ public class WebdiatrConfiguration
     /// Gets or sets the assemblies to scan for request handlers.
     /// </summary>
     public List<Assembly> AssembliesToScan { get; } = new();
-} 
+}
