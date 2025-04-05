@@ -22,7 +22,7 @@ public static class ServiceCollectionExtensions
         var config = new WebdiatrConfiguration();
         configuration?.Invoke(config);
 
-        if (config.AssembliesToScan.Any())
+        if (config.AssembliesToScan.Count > 0)
         {
             foreach (var assembly in config.AssembliesToScan)
             {
